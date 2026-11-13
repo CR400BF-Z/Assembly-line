@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="流水线.vcxproj" Id="d1e1e740-c6a2-43e6-84d1-04e3d6b07a75" />
+</Solution>
