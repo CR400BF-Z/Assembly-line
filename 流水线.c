@@ -74,11 +74,25 @@ void generate(int* num1, int* num2, int* op)
 			printf("本次题目：%d %c %d = ?\n", *num1, operator, *num2);
 		}
 	}
+}void evaluateAnswer()
+{
+	
+}
+void updateStats()
+{
+	printf("学生：学生A\n题型：加减乘除各10题\n----第一部分：加法----");
+}
+void printReport()
+{
+
 }
 int main()
 {
 	initSystem();
 	int num1, num2, op;
 	generate(&num1, &num2, &op);
+	evaluateAnswer();
+	updateStats();
+	printReport();
 	return 0;
 }
