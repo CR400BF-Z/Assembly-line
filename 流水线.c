@@ -7,6 +7,38 @@ void initSystem()//初始化，引入srand函数和time函数，以供后续生成随机数，打印系统
 	srand(time(NULL));
 	printf("==========智能口算系统==========\n");
 }
+void review(int* num1, int* num2, int* op) {//判断对错的函数
+
+	int rightans;
+	if (*op == 0)
+	{
+		rightans = *num1 + *num2;
+	}
+	else if (*op == 1)
+	{
+		rightans = *num1 - *num2;
+	}
+	else if (*op == 2)
+	{
+		rightans = (*num1) * (*num2);
+	}
+	else if (*op == 3)
+	{
+		rightans = (*num1) / (*num2);
+	}
+	int useans;
+	printf("请输入你的答案\n");
+	scanf("%d", &useans);
+	if (useans == rightans)
+	{
+		printf("你太牛逼了，这都答对了");
+	}
+	else
+	{
+		printf("你的答案不对，正确答案是%d", rightans);
+	}
+}
+
 void generateQuestion(int type, int* num1, int* num2, int* op)//传进num，让函数生成随机数并赋值给num1和num2，传进op，让函数生成运算符类型并赋值给op
 {
 	*op = type;
@@ -72,15 +104,19 @@ void generate(int* num1, int* num2, int* op)
 			generateQuestion(k, num1, num2, op);
 			getOpChar(&operator, op);
 			printf("本次题目：%d %c %d = ?\n", *num1, operator, *num2);
+			review(num1, num2, op);
+			printf("\n");
 		}
 	}
-}void evaluateAnswer()
+}
+void evaluateAnswer()
 {
 	
 }
 void updateStats()
 {
 	printf("学生：学生A\n题型：加减乘除各10题\n----第一部分：加法----");
+
 }
 void printReport()
 {
@@ -91,7 +127,6 @@ int main()
 	initSystem();
 	int num1, num2, op;
 	generate(&num1, &num2, &op);
-	evaluateAnswer();
 	updateStats();
 	printReport();
 	return 0;
