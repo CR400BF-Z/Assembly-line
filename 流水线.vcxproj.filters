@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\试卷出题system\流水线.c">
+    <ClCompile Include="流水线.c">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
