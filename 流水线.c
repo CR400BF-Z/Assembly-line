@@ -7,7 +7,7 @@ void initSystem()//初始化，引入srand函数和time函数，以供后续生成随机数，打印系统
 	srand(time(NULL));
 	printf("==========智能口算系统==========\n");
 }
-void review(int* num1, int* num2, int* op) {//判断对错的函数
+void evaluateAnswer(int* num1, int* num2, int* op) {//判断对错的函数
 
 	int rightans;
 	if (*op == 0)
@@ -104,14 +104,10 @@ void generate(int* num1, int* num2, int* op)
 			generateQuestion(k, num1, num2, op);
 			getOpChar(&operator, op);
 			printf("本次题目：%d %c %d = ?\n", *num1, operator, *num2);
-			review(num1, num2, op);
+			evaluateAnswer(num1, num2, op);
 			printf("\n");
 		}
 	}
-}
-void evaluateAnswer()
-{
-	
 }
 void updateStats()
 {
