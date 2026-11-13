@@ -62,39 +62,23 @@ void getOpChar(char* operator,int* op)//根据op的值，给operator赋值为对应的运算符
 		*operator = '/';
 	}
 }
-void generate()
+void generate(int* num1, int* num2, int* op)
 {
-	int a, b, op;
 	char operator;
-	for (int i = 1; i <= 10; i++)
+	for (int k = 0; k < 4; k++)
 	{
-		generateQuestion(0, &a, &b, &op);
-		getOpChar(&operator, &op);
-		printf("本次题目：%d %c %d = ?\n", a, operator, b);
-	}
-	for (int i = 1; i <= 10; i++)
-	{
-		generateQuestion(1, &a, &b, &op);
-		getOpChar(&operator, &op);
-		printf("本次题目：%d %c %d = ?\n", a, operator, b);
-	}
-	for (int i = 1; i <= 10; i++)
-	{
-		generateQuestion(2, &a, &b, &op);
-		getOpChar(&operator, &op);
-		printf("本次题目：%d %c %d = ?\n", a, operator, b);
-	}
-	for (int i = 1; i <= 10; i++)
-	{
-		generateQuestion(3, &a, &b, &op);
-		getOpChar(&operator, &op);
-		printf("本次题目：%d %c %d = ?\n", a, operator, b);
+		for (int i = 1; i <= 10; i++)
+		{
+			generateQuestion(k, num1, num2, op);
+			getOpChar(&operator, op);
+			printf("本次题目：%d %c %d = ?\n", *num1, operator, *num2);
+		}
 	}
 }
 int main()
 {
 	initSystem();
-	int a, b, op, type;
-	generate();
+	int num1, num2, op;
+	generate(&num1, &num2, &op);
 	return 0;
 }
