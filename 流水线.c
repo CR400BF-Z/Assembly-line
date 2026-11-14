@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+void updateStats(int tof, int qNo, int num1, int num2, int op, int userans, int rightans, float* score, int* correctcount, int* wrongcount, int wrongQNo[], int wrongN1[], int wrongN2[], int wrongop[], int wronguserAns[], int wrongRightAns[],int k,int* wrong_total,int* add_correct,int* sub_correct,int* mul_correct,int* div_correct);//声明函数
+void printReport(float score, int correctcount, int wrongcount, int wrongQNo[], int wrongN1[], int wrongN2[], int wrongop[], int wronguserAns[], int wrongRightAns[], int wrong_total, int add_correct, int sub_correct, int mul_correct, int div_correct);//声明函数
 void initSystem()//初始化，引入srand函数和time函数，以供后续生成随机数，打印系统标题
 {
 	srand(time(NULL));
@@ -93,6 +95,16 @@ void getOpChar(char* operator,int* op)//根据op的值，给operator赋值为对应的运算符
 }
 void generate(int* num1, int* num2, int* op)
 {
+	int tof;
+	int correctcount = 0;//正确数
+	int wrongcount = 0;//错误数
+	float score = 0;//总分
+	int wrong_total = 0;
+	int add_correct = 0;
+	int sub_correct = 0;
+	int mul_correct = 0;
+	int div_correct = 0;
+	int wrongQNo[40], wrongN1[40], wrongN2[40], wrongop[40], wronguserAns[40], wrongRightAns[40];
 	printf("学生：学生A\n题型：加减乘除各10题\n");
 	char operator;
 	for (int k = 0; k < 4; k++)
@@ -132,17 +144,99 @@ void generate(int* num1, int* num2, int* op)
 					break; // 输入合法，跳出 while 循环
 				}
 			}
-			int tof = evaluateAnswer(num1, num2, op, userans);//调用evaluateAnswer函数，判断对错，返回1或0，用于统计
+			tof = evaluateAnswer(num1, num2, op, userans);//调用evaluateAnswer函数，判断对错，返回1或0，用于统计
+			int rightans = 0;
+			if (*op == 0)
+			{
+				rightans = *num1 + *num2;
+			}
+			else if (*op == 1)
+			{
+				rightans = *num1 - *num2;
+			}
+			else if (*op == 2)
+			{
+				rightans = (*num1) * (*num2);
+			}
+			else if (*op == 3)
+			{
+				rightans = (*num1) / (*num2);
+			}
+			updateStats(tof, k * 10 + i, *num1, *num2, *op, userans,rightans ,&score, &correctcount, &wrongcount,wrongQNo,wrongN1,wrongN2,wrongop,wronguserAns,wrongRightAns,k,&wrong_total,&add_correct,&sub_correct,&mul_correct,&div_correct);
 			printf("\n");
 		}
 	}
+	printReport(score, correctcount, wrongcount,wrongQNo, wrongN1, wrongN2, wrongop, wronguserAns, wrongRightAns, wrong_total, add_correct, sub_correct, mul_correct, div_correct);
 }
-void updateStats()
+void updateStats(int tof, int qNo, int num1, int num2, int op, int userans,int rightans, float* score, int* correctcount, int* wrongcount, int wrongQNo[], int wrongN1[], int wrongN2[], int wrongop[], int wronguserAns[], int wrongRightAns[],int k,int* wrong_total,int* add_correct,int* sub_correct,int* mul_correct,int* div_correct)
 {
+	if (tof == 1)
+	{
+		*correctcount = *correctcount + 1; // 答对了，正确数 +1
+		*score = *score + 2.5;             // 答对了，总分 +2.5
+		if (k == 0)
+		{
+			*add_correct = *add_correct + 1;
+		}
+		else if (k == 1)
+		{
+			*sub_correct = *sub_correct + 1;
+		}
+		else if (k == 2)
+		{
+			*mul_correct = *mul_correct + 1;
+		}
+		else if (k == 3)
+		{
+			*div_correct = *div_correct + 1;
+		}
+	}
+	else
+	{
+		*wrongcount = *wrongcount + 1;     // 答错了，错误数 +1
+	}
+	//错题统计部分
+	if (tof == 0)
+	{
+		wrongQNo[*wrong_total] = qNo;
+		wrongN1[*wrong_total] = num1;
+		wrongN2[*wrong_total] = num2;
+		wrongop[*wrong_total] = op;
+		wronguserAns[*wrong_total] = userans;
+		wrongRightAns[*wrong_total] = rightans;
+		*wrong_total = *wrong_total + 1;
+	}
+}
+void printReport(float score, int correctcount, int wrongcount,int wrongQNo[], int wrongN1[], int wrongN2[], int wrongop[], int wronguserAns[], int wrongRightAns[], int wrong_total, int add_correct, int sub_correct, int mul_correct, int div_correct)
+{
+	float correct_percent = ((float)correctcount / 40) * 100; // 计算正确率
+	printf("\n========== 训练成绩报告 ==========\n");
+	printf("总题数：40\n");
+	printf("正确题数：%d\n", correctcount);
+	printf("错误题数：%d\n", wrongcount);
+	printf("正确率：%.2f%%\n", correct_percent);
+	printf("得分：%.1f\n", score);
+	printf("\n--- 分题型分布 ---\n");
+	printf("加法：10题，正确 %d 题\n", add_correct);
+	printf("减法：10题，正确 %d 题\n", sub_correct);
+	printf("乘法：10题，正确 %d 题\n", mul_correct);
+	printf("除法：10题，正确 %d 题\n", div_correct);
+	printf("\n--- 错误信息 ---\n");
+	if (wrong_total == 0)
+	{
+		printf("太棒了，全对！\n");
+	}
+	else
+	{
+		char opChar;
+		for (int i = 0; i < wrong_total; i++)
+		{
+			getOpChar(&opChar, &wrongop[i]);// 调用之前的转换函数，把数字变符号
+			printf("%d. 第%d题：%d %c %d = ? 你的答案：%d，正确答案：%d\n",i + 1, wrongQNo[i], wrongN1[i], opChar, wrongN2[i], wronguserAns[i], wrongRightAns[i]);
 
-}
-void printReport()
-{
+		}
+	}
+	printf("==================================\n");
 
 }
 int main()
@@ -150,6 +244,5 @@ int main()
 	initSystem();
 	int num1, num2, op;
 	generate(&num1, &num2, &op);
-	printReport();
 	return 0;
 }
