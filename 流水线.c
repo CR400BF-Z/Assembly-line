@@ -10,32 +10,31 @@ void initSystem()//初始化，引入srand函数和time函数，以供后续生成随机数，打印系统
 void evaluateAnswer(int* num1, int* num2, int* op) {//判断对错的函数
 
 	int rightans;
-	if (*op == 0)
+	switch (*op)
 	{
-		rightans = *num1 + *num2;
-	}
-	else if (*op == 1)
-	{
-		rightans = *num1 - *num2;
-	}
-	else if (*op == 2)
-	{
-		rightans = (*num1) * (*num2);
-	}
-	else if (*op == 3)
-	{
-		rightans = (*num1) / (*num2);
+		case 0:
+			rightans = *num1 + *num2;
+			break;
+		case 1:
+			rightans = *num1 - *num2;
+			break;
+		case 2:
+			rightans = (*num1) * (*num2);
+			break;
+		case 3:
+			rightans = (*num1) / (*num2);
+			break;
 	}
 	int useans;
 	printf("请输入你的答案\n");
 	scanf("%d", &useans);
 	if (useans == rightans)
 	{
-		printf("你太牛逼了，这都答对了");
+		printf("√ 正确");
 	}
 	else
 	{
-		printf("你的答案不对，正确答案是%d", rightans);
+		printf("× 错误，正确答案是%d", rightans);
 	}
 }
 
@@ -96,14 +95,31 @@ void getOpChar(char* operator,int* op)//根据op的值，给operator赋值为对应的运算符
 }
 void generate(int* num1, int* num2, int* op)
 {
+	printf("学生：学生A\n题型：加减乘除各10题\n");
 	char operator;
 	for (int k = 0; k < 4; k++)
 	{
+		if (k == 0)
+		{
+			printf("----第一部分：加法----\n");
+		}
+		else if (k == 1)
+		{
+			printf("----第二部分：减法----\n");
+		}
+		else if (k == 2)
+		{
+			printf("----第三部分：乘法----\n");
+		}
+		else if (k == 3)
+		{
+			printf("----第四部分：除法----\n");
+		}
 		for (int i = 1; i <= 10; i++)
 		{
 			generateQuestion(k, num1, num2, op);
 			getOpChar(&operator, op);
-			printf("本次题目：%d %c %d = ?\n", *num1, operator, *num2);
+			printf("第%d题：%d %c %d = ?\n",k * 10 + i, *num1, operator, *num2);
 			evaluateAnswer(num1, num2, op);
 			printf("\n");
 		}
@@ -111,7 +127,6 @@ void generate(int* num1, int* num2, int* op)
 }
 void updateStats()
 {
-	printf("学生：学生A\n题型：加减乘除各10题\n----第一部分：加法----");
 
 }
 void printReport()
@@ -123,7 +138,6 @@ int main()
 	initSystem();
 	int num1, num2, op;
 	generate(&num1, &num2, &op);
-	updateStats();
 	printReport();
 	return 0;
 }
