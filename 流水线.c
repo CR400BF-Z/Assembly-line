@@ -7,8 +7,7 @@ void initSystem()//³õÊ¼»¯£¬ÒıÈësrandº¯ÊıºÍtimeº¯Êı£¬ÒÔ¹©ºóĞøÉú³ÉËæ»úÊı£¬´òÓ¡ÏµÍ³
 	srand(time(NULL));
 	printf("==========ÖÇÄÜ¿ÚËãÏµÍ³==========\n");
 }
-void evaluateAnswer(int* num1, int* num2, int* op) {//ÅĞ¶Ï¶Ô´íµÄº¯Êı
-
+int evaluateAnswer(int* num1, int* num2, int* op, int userans) {//ÅĞ¶Ï¶Ô´íµÄº¯Êı
 	int rightans;
 	switch (*op)
 	{
@@ -25,16 +24,15 @@ void evaluateAnswer(int* num1, int* num2, int* op) {//ÅĞ¶Ï¶Ô´íµÄº¯Êı
 			rightans = (*num1) / (*num2);
 			break;
 	}
-	int useans;
-	printf("ÇëÊäÈëÄãµÄ´ğ°¸\n");
-	scanf("%d", &useans);
-	if (useans == rightans)
+	if (userans == rightans)
 	{
 		printf("¡Ì ÕıÈ·");
+		return 1;
 	}
 	else
 	{
 		printf("¡Á ´íÎó£¬ÕıÈ·´ğ°¸ÊÇ%d", rightans);
+		return 0;
 	}
 }
 
@@ -67,7 +65,7 @@ void generateQuestion(int type, int* num1, int* num2, int* op)//´«½ønum£¬ÈÃº¯ÊıÉ
 	{
 		*num2 = rand() % 9 + 1;//³ıÊı
 		int result = rand() % 9 + 1;//ÉÌ
-		*num1 = (*num2) * result;//±»³ıÊı
+		*num1 = (*num2) * result;//±»³ıÊı,ÕâÑùÄÜÖ±½Ó±ÜÃâ0µÄ³öÏÖ
 	}
 }
 void random(int* type)//ÓÃ0-3±íÊ¾ËÄÖÖÔËËãÀàĞÍ£¬0Îª¼Ó·¨£¬1Îª¼õ·¨£¬2Îª³Ë·¨£¬3Îª³ı·¨
@@ -120,7 +118,21 @@ void generate(int* num1, int* num2, int* op)
 			generateQuestion(k, num1, num2, op);
 			getOpChar(&operator, op);
 			printf("µÚ%dÌâ£º%d %c %d = ?\n",k * 10 + i, *num1, operator, *num2);
-			evaluateAnswer(num1, num2, op);
+			int userans;
+			printf("ÇëÊäÈëÄãµÄ´ğ°¸\n");
+			while (1) // ¼Ó¸ö while(1)£¬ÊäÈë·Ç·¨ÈÃËûÖØĞÂÊä£¬Ö±µ½Êä¶ÔÎªÖ¹
+			{
+				if (scanf("%d", &userans) != 1)
+				{
+					printf("ÊäÈëÎŞĞ§£¬ÇëÊäÈëÒ»¸öÊı×Ö£º");
+					while (getchar() != '\n'); // Çå¿Õ»º³åÇø
+				}
+				else
+				{
+					break; // ÊäÈëºÏ·¨£¬Ìø³ö while Ñ­»·
+				}
+			}
+			int tof = evaluateAnswer(num1, num2, op, userans);//µ÷ÓÃevaluateAnswerº¯Êı£¬ÅĞ¶Ï¶Ô´í£¬·µ»Ø1»ò0£¬ÓÃÓÚÍ³¼Æ
 			printf("\n");
 		}
 	}
